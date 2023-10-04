@@ -4,14 +4,18 @@ const app = express()
 // use html view files
 
 const path = require('path')
-app.use(express.static(path.join(__dirname, 'views')))
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+//app.use(express.static(path.join(__dirname, 'views')))
 
+// show form data in request
 const parseUrl = require('body-parser');
 let encodeUrl = parseUrl.urlencoded({ extended: true });
 
 app.get('/', (req, res) => {
-  console.log(path.join(__dirname, 'views', 'validate_form.html'))
-  res.sendFile(path.join(__dirname, 'views', 'validate_form.html'))
+  res.render('validate_form')
+  //console.log(path.join(__dirname, 'views', 'validate_form.html'))
+  //res.sendFile(path.join(__dirname, 'views', 'validate_form.html'))
 })
 
 const validId = require('./validate')
