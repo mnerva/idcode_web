@@ -1,0 +1,7 @@
+<% console.log('page content') %>
+<%- include('header'); %>
+<%- include('validate_form'); %>
+<% if(data !== null) { %>
+<%- include('validate_result', data); %>
+<% } %>
+<%- include('footer'); %>

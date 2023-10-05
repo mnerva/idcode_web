@@ -93,26 +93,23 @@ const idInfo = (idcode) => {
 	let birthdayString = birthdayDescription(sex, fullYear(sex, year), month, day)
 	let placeAndOrder = birthayPlaceData(addInfo, year, sex)
 
-	return `
-	<html>
-	  <head>
-	    <title>Isikoodi valideerimine</title>
-	    <meta charset="UTF-8">
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
-	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-	  </head>
-	  <body>
-	    <div class="container">
-	      <h2>Isikoodi valideerimine</h2>
-
-	Isik isikukoodiga ${idcode} on ${sexControl(sex)} (${sex}...), kes on sündinud ${birthdayString} (...${year}${month}${day}...). Tema isikukood registreeriti ${parseInt(fullYear(sex, year)) < 2013 ? placeAndOrder.place+' osakonnas (...' + addInfo.slice(0, 2)+ '...)' : ' Eestis'} ja sel päeval oli ta ${placeAndOrder.order}. ${sexControl(sex) == 'naine' ? sexControl(sex).slice(0,-2)+'s' : sexControl(sex)}soost isik (...${addInfo}.). Isikukoodi kontrollnumbriks on ${control(idcode)} (...${idControl}).
-	<br>
-	<br>
-	<a href="/">Valideeri uus isikukood</a>
-	</div>
-  </body>
-</html>
-	`
+	const resultInfo = {
+		idcode: idcode,
+		sex_description: sexControl(sex),
+		sex_number: sex,
+		birthdayString: birthdayString,
+		year: year,
+		month: month,
+		day: day,
+		register_place: parseInt(fullYear(sex, year)) < 2023 ? placeAndOrder.place + 'osakonnas (...' + 
+			addInfo.slice(0,2) + '...)' : ' Eestis',
+		order_number: placeAndOrder.order,
+		sex_control: sexControl(sex) == 'naine' ? sexControl(sex).slice(0,-2)+'s' : sexControl(sex),
+		addition_info: addInfo,
+		idcode_control_number: control(idcode),
+		idControl: idControl
+	}
+	return resultInfo
 }
 
 module.exports = {

@@ -2,31 +2,39 @@ const express = require('express')
 const app = express()
 
 // use html view files
-
 const path = require('path')
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
-//app.use(express.static(path.join(__dirname, 'views')))
 
 // show form data in request
 const parseUrl = require('body-parser');
 let encodeUrl = parseUrl.urlencoded({ extended: true });
 
 app.get('/', (req, res) => {
-  res.render('validate_form')
-  //console.log(path.join(__dirname, 'views', 'validate_form.html'))
-  //res.sendFile(path.join(__dirname, 'views', 'validate_form.html'))
+  res.render('page', {data: null})
 })
+
 
 const validId = require('./validate')
 
-app.post('/validate', encodeUrl, (req, res) => {
-  console.log('form sata validate')
-  console.log(req.body)
-  console.log(req.body.id_code)
-  res.send(validId.idInfo(req.body.id_code))
+app.post('/', encodeUrl, (req, res) => {
+  res.render('page', {data: validId.idInfo(req.body.id_code)})
+  let error = null
+  if(req.body.id_code === ''){
+    error = 'Palun sisesta vormis andmed'
+  } else if(req.body.id_code.length < 11) {
+    error = 'Palun sisesta korrektne isikukood'
+  }
+  if(error === null){
+    res.render('page', {
+      data: validId.idInfo(req.body.id_code),
+      error: null
+    })
+  } else {
+    res.render('page', {data: null, error: error})
+  }
 })
  
-app.listen(3000, () => {
-  console.log('Example app is started at http://localhost:3000')
+app.listen(3001, () => {
+  console.log('Example app is started at http://localhost:3001')
 })
